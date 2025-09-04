@@ -34,6 +34,7 @@ export const convertAIChunkToAnswer = (chunk: AIMessageChunk) => {
 interface PrimaryContent {
   type: MessageType;
   id: string | undefined;
+  name: string;
   content: string;
   additional_kwargs: Record<string, unknown>;
   tool_calls?: ToolCall[];
@@ -42,6 +43,7 @@ export const extractPrimaryContent = (message: BaseMessage) => {
   const result: PrimaryContent = {
     type: message.getType(),
     id: message.id,
+    name: message.name ?? "",
     content: JSON.stringify(message.content),
     additional_kwargs: message.additional_kwargs,
   };
