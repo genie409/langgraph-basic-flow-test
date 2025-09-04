@@ -1,5 +1,5 @@
 import { AIMessageChunk } from "@langchain/core/messages";
-import type {
+import {
   AIMessage,
   BaseMessage,
   BaseMessageChunk,
@@ -8,7 +8,13 @@ import type {
   ToolMessage,
 } from "@langchain/core/messages";
 import { ToolCall } from "@langchain/core/messages/tool";
-import { StateType } from "@langchain/langgraph";
+import {
+  CompiledStateGraph,
+  StateGraph,
+  StateType,
+} from "@langchain/langgraph";
+import * as fs from "fs";
+import { BasicStateAnnotation } from "./todo-state-graph/todo-state-graph";
 
 export const convertAIChunkToAnswer = (chunk: AIMessageChunk) => {
   const content = chunk.content;
@@ -51,4 +57,24 @@ export const extractPrimaryContent = (message: BaseMessage) => {
     result.tool_calls = (message as AIMessage).tool_calls;
   }
   return result;
+};
+
+export const drawGraph = async (
+  graph: CompiledStateGraph<any, any, any, any, any, any, any>,
+  fileName: string
+) => {
+  const drawableGraph = await graph.getGraphAsync();
+  const image = drawableGraph.drawMermaid();
+  fs.writeFileSync(`./mermaid/${fileName}.mermaid`, image);
+};
+
+export const buildInitialState = (question: string) => {
+  return {
+    messages: [new HumanMessage(question)],
+    question,
+    userName: "",
+    age: 0,
+    gender: "",
+    route_to: "answer",
+  } as Partial<typeof BasicStateAnnotation.State>;
 };

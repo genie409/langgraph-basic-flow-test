@@ -1,0 +1,20 @@
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	makeTodo(makeTodo)
+	route(route)
+	edit(edit)
+	updateTodo(updateTodo)
+	answer(answer)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> makeTodo;
+	answer --> __end__;
+	edit --> updateTodo;
+	makeTodo --> route;
+	route -.-> answer;
+	route -.-> edit;
+	updateTodo -. &nbsp;END&nbsp; .-> __end__;
+	updateTodo -. &nbsp;NEED_ACT&nbsp; .-> route;
+	classDef default fill:#f2f0ff,line-height:1.2;
+	classDef first fill-opacity:0;
+	classDef last fill:#bfb6fc;
